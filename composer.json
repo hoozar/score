@@ -1,4 +1,6 @@
 {
+    "name": "recruitment/football-events",
+    "description": "Simple football events tracking application",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
