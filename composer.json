@@ -20,9 +20,6 @@
         "symfony/yaml": "8.0.*"
     },
     "config": {
-        "platform": {
-            "php": "8.4.17"
-        },
         "allow-plugins": {
             "php-http/discovery": true,
             "symfony/flex": true,
