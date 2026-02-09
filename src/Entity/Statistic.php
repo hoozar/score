@@ -25,6 +25,18 @@ class Statistic
     #[ORM\Column]
     private ?int $count = null;
 
+    public function __construct(
+        ?string $matchId,
+        ?string $teamId,
+        ?string $type,
+        ?int    $count
+    ) {
+        $this->match_id = $matchId;
+        $this->team_id = $teamId;
+        $this->type = $type;
+        $this->count = $count;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,23 +47,9 @@ class Statistic
         return $this->match_id;
     }
 
-    public function setMatchId(string $match_id): static
-    {
-        $this->match_id = $match_id;
-
-        return $this;
-    }
-
     public function getTeamId(): ?string
     {
         return $this->team_id;
-    }
-
-    public function setTeamId(string $team_id): static
-    {
-        $this->team_id = $team_id;
-
-        return $this;
     }
 
     public function getType(): ?string
@@ -59,22 +57,13 @@ class Statistic
         return $this->type;
     }
 
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
     public function getCount(): ?int
     {
         return $this->count;
     }
 
-    public function setCount(int $count): static
+    public function countUp(): void
     {
-        $this->count = $count;
-
-        return $this;
+        $this->count++;
     }
 }

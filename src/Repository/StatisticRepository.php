@@ -16,28 +16,33 @@ class StatisticRepository extends ServiceEntityRepository
         parent::__construct($registry, Statistic::class);
     }
 
-    //    /**
-    //     * @return Statistic[] Returns an array of Statistic objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findByCriteria(array $criteria): array
+    {
+        $qb = $this->createQueryBuilder('s');
+        foreach ($criteria as $key => $value) {
+            if (!empty($value)) {
+                $qb->andWhere("s.$key = :$key")->setParameter($key, $value);
+            }
+        }
 
-    //    public function findOneBySomeField($value): ?Statistic
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findOneByCriteria(array $criteria): ?Statistic
+    {
+        $qb = $this->createQueryBuilder('s');
+        foreach ($criteria as $key => $value) {
+            if (!empty($value)) {
+                $qb->andWhere("s.$key = :$key")->setParameter($key, $value);
+            }
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function save(Statistic $statistic): void
+    {
+        $this->getEntityManager()->persist($statistic);
+        $this->getEntityManager()->flush();
+    }
 }

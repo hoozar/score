@@ -22,6 +22,16 @@ class Event
     #[ORM\Embedded(class: EventData::class, columnPrefix: "data_")]
     private ?EventData $data = null;
 
+    public function __construct(
+        ?string $type,
+        ?int $timestamp,
+        ?EventData $data
+    ) {
+        $this->type = $type;
+        $this->timestamp = $timestamp;
+        $this->data = $data;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -32,34 +42,30 @@ class Event
         return $this->type;
     }
 
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
     public function getTimestamp(): ?int
     {
         return $this->timestamp;
-    }
-
-    public function setTimestamp(int $timestamp): static
-    {
-        $this->timestamp = $timestamp;
-
-        return $this;
     }
 
     public function getData(): ?EventData
     {
         return $this->data;
     }
-
-    public function setData(EventData $data): static
+    public static function fromArray(array $data): self
     {
-        $this->data = $data;
+        return new self(
+            $data['type'] ?? null,
+            time(),
+            EventData::fromArray($data)
+        );
+    }
 
-        return $this;
+    public function toArray(): array
+    {
+        return [
+            'type' => $this->type,
+            'timestamp' => $this->timestamp,
+            'data' => $this->data->toArray()
+        ];
     }
 }

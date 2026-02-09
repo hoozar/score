@@ -25,16 +25,25 @@ class EventData
     #[ORM\Column]
     private ?int $second = null;
 
+    public function __construct(
+        ?string $type,
+        ?string $player,
+        ?string $teamId,
+        ?string $matchId,
+        ?int    $minute,
+        ?int    $second
+    ) {
+        $this->type = $type;
+        $this->player = $player;
+        $this->team_id = $teamId;
+        $this->match_id = $matchId;
+        $this->minute = $minute;
+        $this->second = $second;
+    }
+
     public function getType(): ?string
     {
         return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
     }
 
     public function getPlayer(): ?string
@@ -42,23 +51,9 @@ class EventData
         return $this->player;
     }
 
-    public function setPlayer(?string $player): static
-    {
-        $this->player = $player;
-
-        return $this;
-    }
-
     public function getTeamId(): ?string
     {
         return $this->team_id;
-    }
-
-    public function setTeamId(string $team_id): static
-    {
-        $this->team_id = $team_id;
-
-        return $this;
     }
 
     public function getMatchId(): ?string
@@ -66,23 +61,9 @@ class EventData
         return $this->match_id;
     }
 
-    public function setMatchId(string $match_id): static
-    {
-        $this->match_id = $match_id;
-
-        return $this;
-    }
-
     public function getMinute(): ?int
     {
         return $this->minute;
-    }
-
-    public function setMinute(int $minute): static
-    {
-        $this->minute = $minute;
-
-        return $this;
     }
 
     public function getSecond(): ?int
@@ -90,10 +71,27 @@ class EventData
         return $this->second;
     }
 
-    public function setSecond(int $second): static
+    public static function fromArray(array $data): self
     {
-        $this->second = $second;
+        return new self(
+            $data['type'] ?? null,
+            $data['player'] ?? null,
+            $data['team_id'] ?? null,
+            $data['match_id'] ?? null,
+            $data['minute'] ?? null,
+            $data['second'] ?? null
+        );
+    }
 
-        return $this;
+    public function toArray(): array
+    {
+        return [
+            'type' => $this->type,
+            'player' => $this->player,
+            'team_id' => $this->team_id,
+            'match_id' => $this->match_id,
+            'minute' => $this->minute,
+            'second' => $this->second
+        ];
     }
 }
