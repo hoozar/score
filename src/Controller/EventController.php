@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -6,6 +7,7 @@ use App\Entity\Event;
 use App\Entity\EventTypeEnum;
 use App\Message\EventOccurred;
 use App\Repository\EventRepository;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,11 +48,14 @@ final class EventController extends AbstractController
                 )
             );
 
-            return $this->json([
-                'status' => 'success',
-                'message' => 'Event saved successfully',
-                'event' => $event->toArray()
-            ]);
+            return $this->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Event saved successfully',
+                    'event' => $event->toArray()
+                ],
+                201
+            );
 
         } catch (ValidationFailedException $e) {
             $msg = [];
@@ -63,9 +68,14 @@ final class EventController extends AbstractController
                 400
             );
 
+        } catch (JsonException $e) {
+            return $this->json(
+                ['error' => 'Malformed input data.'],
+                400
+            );
         } catch (Throwable $e) {
             return $this->json(
-                ['error' => 'Malformed input data: ' . $e->getMessage()],
+                ['error' => $e->getMessage()],
                 500
             );
         }

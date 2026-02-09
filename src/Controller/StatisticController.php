@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -40,7 +41,7 @@ final class StatisticController extends AbstractController
         } catch (Throwable $e) {
             return $this->json(
                 ['error' => $e->getMessage()],
-                500
+                400
             );
         }
     }
@@ -54,7 +55,7 @@ final class StatisticController extends AbstractController
                 $teamData[$record->getTeamId()] = [];
             }
 
-            $teamData[$record->getTeamId()][$record->getType()] = $record->getCount();
+            $teamData[$record->getTeamId()][$record->getType() . 's'] = $record->getCount();
         }
 
         return $teamData;
